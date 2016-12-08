@@ -42,7 +42,7 @@ import io.vertx.ext.asyncsql.AsyncSQLClient;
  * @author Michael Remme
  * 
  */
-public class MySqlDataStore extends AbstractDataStore {
+public class MySqlDataStore extends AbstractDataStore<Object> {
   /**
    * The name of the property, which describes the database to be used
    */

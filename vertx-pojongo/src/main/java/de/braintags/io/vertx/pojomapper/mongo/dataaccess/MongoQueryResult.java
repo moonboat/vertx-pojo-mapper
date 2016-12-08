@@ -43,7 +43,7 @@ public class MongoQueryResult<T> extends AbstractQueryResult<T> {
    * @param mapper
    * @param originalQuery
    */
-  public MongoQueryResult(List<JsonObject> jsonResult, MongoDataStore store, MongoMapper mapper,
+  public MongoQueryResult(List<JsonObject> jsonResult, MongoDataStore store, MongoMapper<T> mapper,
       MongoQueryRambler rambler) {
     super(store, mapper, jsonResult.size(), rambler.getQueryExpression());
     this.jsonResult = jsonResult;
@@ -64,8 +64,7 @@ public class MongoQueryResult<T> extends AbstractQueryResult<T> {
       if (result.failed()) {
         handler.handle(Future.failedFuture(result.cause()));
       } else {
-        @SuppressWarnings("unchecked")
-        T pojo = (T) result.result().getEntity();
+        T pojo = result.result().getEntity();
         handler.handle(Future.succeededFuture(pojo));
       }
     });

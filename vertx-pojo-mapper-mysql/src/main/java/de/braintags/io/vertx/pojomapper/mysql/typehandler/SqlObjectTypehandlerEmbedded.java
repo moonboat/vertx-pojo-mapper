@@ -80,7 +80,8 @@ public class SqlObjectTypehandlerEmbedded extends ObjectTypeHandlerEmbedded {
   }
 
   @Override
-  protected void writeSingleValueAsMapper(IDataStore store, Object embeddedObject, IMapper embeddedMapper, IField field,
+  protected <T> void writeSingleValueAsMapper(IDataStore store, T embeddedObject, IMapper<T> embeddedMapper,
+      IField field,
       Handler<AsyncResult<ITypeHandlerResult>> handler) {
     checkId(store, embeddedObject, embeddedMapper, idResult -> {
       if (idResult.failed()) {
@@ -91,7 +92,7 @@ public class SqlObjectTypehandlerEmbedded extends ObjectTypeHandlerEmbedded {
               if (result.failed()) {
                 fail(result.cause(), handler);
               } else {
-                success(((SqlStoreObject) result.result()).getContainerAsJson(), handler);
+                success(((SqlStoreObject< ? >) result.result()).getContainerAsJson(), handler);
               }
             });
       }
@@ -99,7 +100,8 @@ public class SqlObjectTypehandlerEmbedded extends ObjectTypeHandlerEmbedded {
 
   }
 
-  private void checkId(IDataStore store, Object embeddedObject, IMapper mapper, Handler<AsyncResult<Void>> handler) {
+  private void checkId(IDataStore store, Object embeddedObject, IMapper mapper,
+      Handler<AsyncResult<Void>> handler) {
     IField field = mapper.getIdField();
     Object id = field.getPropertyAccessor().readData(embeddedObject);
     if (id != null) {

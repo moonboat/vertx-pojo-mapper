@@ -30,12 +30,12 @@ import de.braintags.io.vertx.pojomapper.typehandler.ITypeHandlerFactory;
  * 
  */
 
-public class MapperFactory implements IMapperFactory {
-  private IDataStore dataStore;
-  private final Map<String, IMapper> mappedClasses = new HashMap<String, IMapper>();
+public class MapperFactory<F> implements IMapperFactory<F> {
+  private IDataStore                      dataStore;
+  private final Map<String, IMapper< ? >> mappedClasses = new HashMap<String, IMapper< ? >>();
   private ITypeHandlerFactory typeHandlerFactory;
   private IPropertyMapperFactory propertyMapperFactory;
-  private IStoreObjectFactory storeObjectFactory;
+  private IStoreObjectFactory<F>          storeObjectFactory;
 
   /**
    * 
@@ -43,7 +43,7 @@ public class MapperFactory implements IMapperFactory {
    *          the {@link IDataStore} to be used
    */
   public MapperFactory(IDataStore dataStore, ITypeHandlerFactory typeHandlerFactory,
-      IPropertyMapperFactory propertyMapperFactory, IStoreObjectFactory stf) {
+      IPropertyMapperFactory propertyMapperFactory, IStoreObjectFactory<F> stf) {
     this.dataStore = dataStore;
     this.typeHandlerFactory = typeHandlerFactory;
     this.propertyMapperFactory = propertyMapperFactory;
@@ -60,7 +60,7 @@ public class MapperFactory implements IMapperFactory {
     String className = mapperClass.getName();
     if (mappedClasses.containsKey(className)) {
       @SuppressWarnings("unchecked")
-      IMapper<T> cachedEntry = mappedClasses.get(className);
+      IMapper<T> cachedEntry = (IMapper<T>) mappedClasses.get(className);
       return cachedEntry;
     }
     if (!mapperClass.isAnnotationPresent(Entity.class))
@@ -138,7 +138,7 @@ public class MapperFactory implements IMapperFactory {
   }
 
   @Override
-  public final IStoreObjectFactory getStoreObjectFactory() {
+  public final IStoreObjectFactory<F> getStoreObjectFactory() {
     return storeObjectFactory;
   }
 
@@ -146,7 +146,7 @@ public class MapperFactory implements IMapperFactory {
    * @param storeObjectFactory
    *          the storeObjectFactory to set
    */
-  protected final void setStoreObjectFactory(IStoreObjectFactory storeObjectFactory) {
+  protected final void setStoreObjectFactory(IStoreObjectFactory<F> storeObjectFactory) {
     this.storeObjectFactory = storeObjectFactory;
   }
 

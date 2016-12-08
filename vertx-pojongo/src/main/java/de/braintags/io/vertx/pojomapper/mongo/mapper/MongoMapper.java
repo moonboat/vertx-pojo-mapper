@@ -26,13 +26,13 @@ import de.braintags.io.vertx.pojomapper.mapping.impl.MapperFactory;
  * 
  */
 
-public class MongoMapper extends Mapper {
+public class MongoMapper<T> extends Mapper<T> {
 
   /**
    * @param mapperClass
    * @param mapperFactory
    */
-  public MongoMapper(Class<?> mapperClass, MapperFactory mapperFactory) {
+  public MongoMapper(Class<T> mapperClass, MapperFactory mapperFactory) {
     super(mapperClass, mapperFactory);
     checkIdField();
   }

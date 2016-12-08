@@ -45,7 +45,8 @@ import io.vertx.core.json.JsonObject;
  */
 
 public class DummyDataStore implements IDataStore {
-  IMapperFactory mf = new MapperFactory(this, new JsonTypeHandlerFactory(), new JsonPropertyMapperFactory(), null);
+  IMapperFactory<JsonObject>     mf = new MapperFactory(this, new JsonTypeHandlerFactory(),
+      new JsonPropertyMapperFactory(), null);
   ITableGenerator tg = new DummyTableGenerator();
   String database;
   private JsonObject properties;

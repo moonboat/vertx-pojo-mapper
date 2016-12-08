@@ -23,7 +23,7 @@ import de.braintags.io.vertx.pojomapper.typehandler.ITypeHandlerFactory;
  * @author Michael Remme
  * 
  */
-public interface IMapperFactory {
+public interface IMapperFactory<F> {
 
   /**
    * Retrieve the {@link IMapper} for the given class
@@ -71,6 +71,6 @@ public interface IMapperFactory {
    * 
    * @return the instance of {@link IStoreObjectFactory}
    */
-  public IStoreObjectFactory<?> getStoreObjectFactory();
+  public IStoreObjectFactory<F> getStoreObjectFactory();
 
 }

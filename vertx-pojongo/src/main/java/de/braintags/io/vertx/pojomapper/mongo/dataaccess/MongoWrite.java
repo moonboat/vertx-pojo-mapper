@@ -38,6 +38,8 @@ import io.vertx.ext.mongo.MongoClient;
 public class MongoWrite<T> extends AbstractWrite<T> {
   private static final Logger LOG = LoggerFactory.getLogger(MongoWrite.class);
 
+  private final MongoDataStore mongoDataStore;
+
   /**
    * Constructor
    * 
@@ -48,6 +50,7 @@ public class MongoWrite<T> extends AbstractWrite<T> {
    */
   public MongoWrite(final Class<T> mapperClass, MongoDataStore datastore) {
     super(mapperClass, datastore);
+    mongoDataStore = datastore;
   }
 
   @Override
@@ -74,13 +77,13 @@ public class MongoWrite<T> extends AbstractWrite<T> {
   }
 
   private void save(T entity, IWriteResult writeResult, Handler<AsyncResult<Void>> resultHandler) {
-    getDataStore().getMapperFactory().getStoreObjectFactory().createStoreObject(getMapper(), entity, result -> {
+    mongoDataStore.getMapperFactory().getStoreObjectFactory().createStoreObject(getMapper(), entity, result -> {
       if (result.failed()) {
         WriteException we = new WriteException(result.cause());
         LOG.info("failed", we);
         resultHandler.handle(Future.failedFuture(we));
       } else {
-        doSave(entity, (MongoStoreObject) result.result(), writeResult, sResult -> {
+        doSave(entity, (MongoStoreObject<T>) result.result(), writeResult, sResult -> {
           if (sResult.failed()) {
             LOG.info("failed", sResult.cause());
             resultHandler.handle(Future.failedFuture(sResult.cause()));
@@ -98,7 +101,7 @@ public class MongoWrite<T> extends AbstractWrite<T> {
    * @param storeObject
    * @param resultHandler
    */
-  private void doSave(T entity, MongoStoreObject storeObject, IWriteResult writeResult,
+  private void doSave(T entity, MongoStoreObject<T> storeObject, IWriteResult writeResult,
       Handler<AsyncResult<Void>> resultHandler) {
     LOG.debug("now saving: " + storeObject.toString());
     if (storeObject.isNewInstance()) {

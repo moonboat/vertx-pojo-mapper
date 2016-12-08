@@ -16,7 +16,6 @@ package de.braintags.io.vertx.pojomapper.mysql.dataaccess;
 import java.util.List;
 import java.util.Objects;
 
-import de.braintags.io.vertx.pojomapper.IDataStore;
 import de.braintags.io.vertx.pojomapper.dataaccess.impl.AbstractWrite;
 import de.braintags.io.vertx.pojomapper.dataaccess.write.IWrite;
 import de.braintags.io.vertx.pojomapper.dataaccess.write.IWriteResult;
@@ -52,13 +51,15 @@ public class SqlWrite<T> extends AbstractWrite<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(SqlWrite.class);
   private static final String LAST_INSERT_ID_COMMAND = "SELECT LAST_INSERT_ID();";
   private int saveSize;
+  private MySqlDataStore      sqlDataStore;
 
   /**
    * @param mapperClass
    * @param datastore
    */
-  public SqlWrite(Class<T> mapperClass, IDataStore datastore) {
+  public SqlWrite(Class<T> mapperClass, MySqlDataStore datastore) {
     super(mapperClass, datastore);
+    sqlDataStore = datastore;
   }
 
   @Override
@@ -68,7 +69,7 @@ public class SqlWrite<T> extends AbstractWrite<T> {
       resultHandler.handle(Future.succeededFuture(new SqlWriteResult()));
       return;
     }
-    getDataStore().getMapperFactory().getStoreObjectFactory().createStoreObjects(getMapper(), getObjectsToSave(),
+    sqlDataStore.getMapperFactory().getStoreObjectFactory().createStoreObjects(getMapper(), getObjectsToSave(),
         stoResult -> {
           if (stoResult.failed()) {
             resultHandler.handle(Future.failedFuture(stoResult.cause()));

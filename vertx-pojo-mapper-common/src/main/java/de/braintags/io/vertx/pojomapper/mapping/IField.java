@@ -103,7 +103,7 @@ public interface IField {
    * 
    * @return the mapper
    */
-  public IMapper getMapper();
+  public IMapper< ? > getMapper();
 
   /**
    * Get the constructor with the given parameters

@@ -43,7 +43,7 @@ import io.vertx.ext.mongo.MongoClient;
  * 
  */
 
-public class MongoDataStore extends AbstractDataStore implements IDataStore {
+public class MongoDataStore extends AbstractDataStore<JsonObject> {
 
   /**
    * The minimal version of MongoDb, which is expected by the current implementation

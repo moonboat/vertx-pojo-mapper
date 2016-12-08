@@ -40,10 +40,10 @@ import io.vertx.core.json.JsonObject;
  * 
  */
 
-public abstract class AbstractDataStore implements IDataStore {
+public abstract class AbstractDataStore<F> implements IDataStore {
   private Vertx vertx;
   private JsonObject properties;
-  private IMapperFactory mapperFactory;
+  private IMapperFactory<F>          mapperFactory;
   private ITableGenerator tableGenerator;
   private IDataStoreSynchronizer dataStoreSynchronizer;
   private Map<String, IKeyGenerator> keyGeneratorMap = new HashMap<>();
@@ -75,7 +75,7 @@ public abstract class AbstractDataStore implements IDataStore {
    * @see de.braintags.io.vertx.pojomapper.IDataStore#getMapperFactory()
    */
   @Override
-  public final IMapperFactory getMapperFactory() {
+  public final IMapperFactory<F> getMapperFactory() {
     return mapperFactory;
   }
 
@@ -83,7 +83,7 @@ public abstract class AbstractDataStore implements IDataStore {
    * @param mapperFactory
    *          the mapperFactory to set
    */
-  protected final void setMapperFactory(IMapperFactory mapperFactory) {
+  protected final void setMapperFactory(IMapperFactory<F> mapperFactory) {
     this.mapperFactory = mapperFactory;
   }
 

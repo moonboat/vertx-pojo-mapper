@@ -115,12 +115,17 @@ public class ObjectTypeHandlerEmbedded extends ObjectTypeHandler {
       success(null, handler);
     } else {
       IDataStore store = field.getMapper().getMapperFactory().getDataStore();
-      IMapper embeddedMapper = store.getMapperFactory().getMapper(embeddedObject.getClass());
-      if (embeddedMapper == null) {
-        fail(new MappingException("Embedded should be used for mappable pojos only: " + field.getFullName()), handler);
-      } else {
-        writeSingleValueAsMapper(store, embeddedObject, embeddedMapper, field, handler);
-      }
+      intoStoreTyped(embeddedObject, field, handler, store);
+    }
+  }
+
+  private <T> void intoStoreTyped(T embeddedObject, IField field, Handler<AsyncResult<ITypeHandlerResult>> handler,
+      IDataStore store) {
+    IMapper<T> embeddedMapper = (IMapper<T>) store.getMapperFactory().getMapper(embeddedObject.getClass());
+    if (embeddedMapper == null) {
+      fail(new MappingException("Embedded should be used for mappable pojos only: " + field.getFullName()), handler);
+    } else {
+      writeSingleValueAsMapper(store, embeddedObject, embeddedMapper, field, handler);
     }
   }
 
@@ -137,7 +142,8 @@ public class ObjectTypeHandlerEmbedded extends ObjectTypeHandler {
    * @param handler
    *          the hander to be informed
    */
-  protected void writeSingleValueAsMapper(IDataStore store, Object embeddedObject, IMapper embeddedMapper, IField field,
+  protected <T> void writeSingleValueAsMapper(IDataStore store, T embeddedObject, IMapper<T> embeddedMapper,
+      IField field,
       Handler<AsyncResult<ITypeHandlerResult>> handler) {
     store.getMapperFactory().getStoreObjectFactory().createStoreObject(embeddedMapper, embeddedObject, result -> {
       if (result.failed()) {

@@ -13,7 +13,7 @@ import de.braintags.io.vertx.pojomapper.typehandler.ITypeHandlerFactory;
  * @author Michael Remme
  * 
  */
-public class SqlMapperFactory extends MapperFactory {
+public class SqlMapperFactory extends MapperFactory<Object> {
 
   /**
    * @param dataStore
@@ -22,7 +22,7 @@ public class SqlMapperFactory extends MapperFactory {
    * @param stf
    */
   public SqlMapperFactory(IDataStore dataStore, ITypeHandlerFactory typeHandlerFactory,
-      IPropertyMapperFactory propertyMapperFactory, IStoreObjectFactory stf) {
+      IPropertyMapperFactory propertyMapperFactory, IStoreObjectFactory<Object> stf) {
     super(dataStore, typeHandlerFactory, propertyMapperFactory, stf);
   }
 
@@ -32,8 +32,8 @@ public class SqlMapperFactory extends MapperFactory {
    * @see de.braintags.io.vertx.pojomapper.mapping.impl.MapperFactory#createMapper(java.lang.Class)
    */
   @Override
-  protected Mapper createMapper(Class mapperClass) {
-    return new SqlMapper(mapperClass, this);
+  protected <T> Mapper<T> createMapper(Class<T> mapperClass) {
+    return new SqlMapper<T>(mapperClass, this);
   }
 
 }

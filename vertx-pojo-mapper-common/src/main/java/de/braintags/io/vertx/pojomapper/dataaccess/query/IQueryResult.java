@@ -41,7 +41,7 @@ public interface IQueryResult<E> extends CollectionAsync<E> {
    * 
    * @return
    */
-  public IMapper getMapper();
+  public IMapper<E> getMapper();
 
   /**
    * Get the original query, which was executed in the datastore

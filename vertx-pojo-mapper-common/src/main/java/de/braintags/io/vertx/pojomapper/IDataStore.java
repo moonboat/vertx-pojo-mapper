@@ -90,14 +90,14 @@ public interface IDataStore {
    * 
    * @return
    */
-  IMapperFactory getMapperFactory();
+  IMapperFactory< ? > getMapperFactory();
 
   /**
    * Get the instance of {@link IDataStoreSynchronizer} suitable for the current datastore
    * 
    * @return the instance of {@link IDataStoreSynchronizer} for the current datastore or null, if no synchronizer needed
    */
-  IDataStoreSynchronizer getDataStoreSynchronizer();
+  IDataStoreSynchronizer< ? > getDataStoreSynchronizer();
 
   /**
    * Get the instance of {@link ITableGenerator} suitable for the given datastore

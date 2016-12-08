@@ -34,7 +34,7 @@ public abstract class AbstractQueryResult<T> extends AbstractCollectionAsync<T> 
   private static final io.vertx.core.logging.Logger LOGGER = io.vertx.core.logging.LoggerFactory
       .getLogger(AbstractQueryResult.class);
 
-  private IMapper mapper;
+  private IMapper<T>                                mapper;
   private IDataStore datastore;
   private T[] pojoResult;
   private IQueryExpression originalQuery;
@@ -53,7 +53,7 @@ public abstract class AbstractQueryResult<T> extends AbstractCollectionAsync<T> 
    *          the original query which was processed to create the current result
    */
   @SuppressWarnings("unchecked")
-  public AbstractQueryResult(IDataStore datastore, IMapper mapper, int resultSize, IQueryExpression originalQuery) {
+  public AbstractQueryResult(IDataStore datastore, IMapper<T> mapper, int resultSize, IQueryExpression originalQuery) {
     this.datastore = datastore;
     this.mapper = mapper;
     this.originalQuery = originalQuery;
@@ -96,7 +96,7 @@ public abstract class AbstractQueryResult<T> extends AbstractCollectionAsync<T> 
    * @see de.braintags.io.vertx.pojomapper.dataaccess.query.IQueryResult#getMapper()
    */
   @Override
-  public IMapper getMapper() {
+  public IMapper<T> getMapper() {
     return mapper;
   }
 
