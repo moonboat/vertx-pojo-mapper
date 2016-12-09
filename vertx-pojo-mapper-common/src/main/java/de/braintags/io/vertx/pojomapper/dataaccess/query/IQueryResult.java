@@ -22,12 +22,12 @@ import de.braintags.io.vertx.util.CollectionAsync;
  * can decide to perform a lazy load of found results
  * 
  * @author Michael Remme
- * @param <E>
+ * @param <T>
  *          the underlaying mapper class
  * 
  */
 
-public interface IQueryResult<E> extends CollectionAsync<E> {
+public interface IQueryResult<T> extends CollectionAsync<T> {
 
   /**
    * Get the {@link IDataStore} by which the current instance was created
@@ -41,7 +41,7 @@ public interface IQueryResult<E> extends CollectionAsync<E> {
    * 
    * @return
    */
-  public IMapper<E> getMapper();
+  public IMapper<T> getMapper();
 
   /**
    * Get the original query, which was executed in the datastore

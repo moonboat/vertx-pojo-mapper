@@ -81,7 +81,7 @@ public class TestEncoder extends DatastoreBaseTest {
   }
 
   private void checkEncoderDefined(TestContext context) {
-    context.assertFalse(((AbstractDataStore) getDataStore(context)).getEncoderMap().isEmpty(),
+    context.assertFalse(((AbstractDataStore< ? >) getDataStore(context)).getEncoderMap().isEmpty(),
         "no encoders defined in datastore");
   }
 }

@@ -135,7 +135,8 @@ public class QueryHelper {
    * @param handler
    *          the handler to be informed
    */
-  public static final void queryResultToList(IQueryResult<?> queryResult, Handler<AsyncResult<List<?>>> handler) {
+  public static final void queryResultToList(IQueryResult< ? > queryResult,
+      Handler<AsyncResult<List< ? >>> handler) {
     queryResult.toArray(result -> {
       if (result.failed()) {
         handler.handle(Future.failedFuture(result.cause()));

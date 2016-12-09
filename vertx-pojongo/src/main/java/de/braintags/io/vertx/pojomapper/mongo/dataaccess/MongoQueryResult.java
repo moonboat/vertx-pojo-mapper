@@ -16,6 +16,7 @@ import java.util.List;
 
 import de.braintags.io.vertx.pojomapper.dataaccess.query.IQueryResult;
 import de.braintags.io.vertx.pojomapper.dataaccess.query.impl.AbstractQueryResult;
+import de.braintags.io.vertx.pojomapper.mapping.IStoreObject;
 import de.braintags.io.vertx.pojomapper.mapping.IStoreObjectFactory;
 import de.braintags.io.vertx.pojomapper.mongo.MongoDataStore;
 import de.braintags.io.vertx.pojomapper.mongo.mapper.MongoMapper;
@@ -70,7 +71,16 @@ public class MongoQueryResult<T> extends AbstractQueryResult<T> {
     });
   }
 
+  @Override
+  protected void getStoreObject(int i, Handler<AsyncResult<IStoreObject<T, ? >>> handler) {
+    IStoreObjectFactory<JsonObject> sf = (IStoreObjectFactory<JsonObject>) getDataStore().getMapperFactory()
+        .getStoreObjectFactory();
+    JsonObject sourceObject = jsonResult.get(i);
+    sf.createStoreObject(sourceObject, getMapper(), handler);
+  }
+
   public List<JsonObject> getOriginalResult() {
     return jsonResult;
   }
+
 }

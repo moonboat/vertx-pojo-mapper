@@ -16,6 +16,7 @@ package de.braintags.io.vertx.pojomapper.dataaccess.query.impl;
 import de.braintags.io.vertx.pojomapper.IDataStore;
 import de.braintags.io.vertx.pojomapper.dataaccess.query.IQueryResult;
 import de.braintags.io.vertx.pojomapper.mapping.IMapper;
+import de.braintags.io.vertx.pojomapper.mapping.IStoreObject;
 import de.braintags.io.vertx.util.AbstractCollectionAsync;
 import de.braintags.io.vertx.util.IteratorAsync;
 import io.vertx.core.AsyncResult;
@@ -79,6 +80,15 @@ public abstract class AbstractQueryResult<T> extends AbstractCollectionAsync<T> 
    * @param handler
    */
   protected abstract void generatePojo(int i, Handler<AsyncResult<T>> handler);
+
+  /**
+   * Get the StoreObject from the datastore at position i and return it to the handler.
+   * 
+   * @param i
+   *          the position inside the result from the datastore
+   * @param handler
+   */
+  protected abstract void getStoreObject(int i, Handler<AsyncResult<IStoreObject<T, ? >>> handler);
 
   /*
    * (non-Javadoc)
@@ -147,7 +157,22 @@ public abstract class AbstractQueryResult<T> extends AbstractCollectionAsync<T> 
       }
     }
 
+    class DatastoreResultIterator implements IteratorAsync<IStoreObject<T, ? >> {
+      private int currentIndex = 0;
+
+      @Override
+      public boolean hasNext() {
+        return currentIndex < pojoResult.length;
+      }
+
+      @Override
+      public void next(Handler<AsyncResult<IStoreObject<T, ? >>> handler) {
+        int thisIndex = currentIndex++;
+        getStoreObject(thisIndex, handler);
+      }
+    }
   }
+
 
   /**
    * @return the completeResult

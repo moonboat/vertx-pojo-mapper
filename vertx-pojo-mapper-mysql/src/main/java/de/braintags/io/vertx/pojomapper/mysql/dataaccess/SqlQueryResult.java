@@ -15,6 +15,7 @@ package de.braintags.io.vertx.pojomapper.mysql.dataaccess;
 
 import de.braintags.io.vertx.pojomapper.dataaccess.query.impl.AbstractQueryResult;
 import de.braintags.io.vertx.pojomapper.mapping.IMapper;
+import de.braintags.io.vertx.pojomapper.mapping.IStoreObject;
 import de.braintags.io.vertx.pojomapper.mysql.MySqlDataStore;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -45,7 +46,7 @@ public class SqlQueryResult<T> extends AbstractQueryResult<T> {
    * @param query
    *          the {@link SqlQueryRambler}
    */
-  public SqlQueryResult(ResultSet resultSet, MySqlDataStore store, IMapper mapper, SqlQueryRambler query) {
+  public SqlQueryResult(ResultSet resultSet, MySqlDataStore store, IMapper<T> mapper, SqlQueryRambler query) {
     super(store, mapper, resultSet.getNumRows(), query.getQueryExpression());
     this.resultSet = resultSet;
   }
@@ -63,6 +64,13 @@ public class SqlQueryResult<T> extends AbstractQueryResult<T> {
         handler.handle(Future.succeededFuture(pojo));
       }
     });
+  }
+
+  @Override
+  protected void getStoreObject(int i, Handler<AsyncResult<IStoreObject<T, ? >>> handler) {
+    SqlStoreObjectFactory sf = (SqlStoreObjectFactory) getDataStore().getMapperFactory().getStoreObjectFactory();
+    JsonObject sourceObject = resultSet.getRows().get(i);
+    sf.createStoreObject(sourceObject, getMapper(), handler);
   }
 
   public ResultSet getResultSet() {

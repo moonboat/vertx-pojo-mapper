@@ -73,7 +73,7 @@ public class SqlStoreObject<T> extends AbstractStoreObject<T, Object> {
   public Object get(IField field) {
     String colName = field.getColumnInfo().getName();
     return container instanceof JsonObject ? ((JsonObject) container).getValue(colName)
-        : ((Map) container).get(colName);
+        : ((Map<String, ? >) container).get(colName);
   }
 
   /**
@@ -102,7 +102,7 @@ public class SqlStoreObject<T> extends AbstractStoreObject<T, Object> {
   public boolean hasProperty(IField field) {
     String colName = field.getColumnInfo().getName();
     return container instanceof JsonObject ? ((JsonObject) container).containsKey(colName)
-        : ((Map) container).containsKey(colName);
+        : ((Map<String, Object>) container).containsKey(colName);
   }
 
   /*
@@ -123,7 +123,7 @@ public class SqlStoreObject<T> extends AbstractStoreObject<T, Object> {
     if (container instanceof JsonObject) {
       ((JsonObject) container).put(ci.getName(), value);
     } else {
-      ((Map) container).put(ci.getName(), value);
+      ((Map<String, Object>) container).put(ci.getName(), value);
     }
     return this;
   }
